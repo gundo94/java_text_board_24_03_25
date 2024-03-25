@@ -8,7 +8,7 @@ public class Main {
     System.out.println("== 자바 텍스트 게시판 시작 ==");
 
     Scanner sc = new Scanner(System.in);
-
+    int articleLastId = 0;
     while (true) {
       System.out.printf("명령) ");
       String cmd = sc.nextLine();
@@ -20,7 +20,7 @@ public class Main {
         System.out.printf("내용 : ");
         String body = sc.nextLine();
 
-        int id = 1;
+        int id = ++articleLastId ;
         System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
       }
 
