@@ -9,6 +9,8 @@ public class Main {
 
     Scanner sc = new Scanner(System.in);
     int articleLastId = 0;
+    Article lastArticle = null;
+
     while (true) {
       System.out.printf("명령) ");
       String cmd = sc.nextLine();
@@ -23,9 +25,25 @@ public class Main {
         int id = ++articleLastId ;
 
         Article article = new Article(id,title, body);
+        lastArticle = article;
 
         System.out.println("생성 된 게시물 객체 : " + article);
         System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
+      }
+
+      else if (cmd.equals("/usr/article/detail")) {
+
+        if(lastArticle == null) {
+          System.out.println("게시물이 존재하지 않습니다.");
+          continue;
+        }
+
+        Article article = lastArticle;
+
+        System.out.println("== 게시물 상세내용 ==");
+        System.out.printf("번호 : %d\n", article.id);
+        System.out.printf("제목 : %s\n", article.title);
+        System.out.printf("내용 : %s\n", article.body);
       }
 
       else if (cmd.equals("exit")) {
