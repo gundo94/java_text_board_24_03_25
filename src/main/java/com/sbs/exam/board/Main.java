@@ -1,9 +1,7 @@
 package com.sbs.exam.board;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -30,7 +28,10 @@ public class Main {
     while (true) {
       System.out.printf("명령) ");
       String cmd = sc.nextLine();
-      if (cmd.equals("/usr/article/write")) {
+
+      Rq rq = new Rq(cmd);
+
+      if (rq.getUrlPath().equals("/usr/article/write")) {
         System.out.println("== 게시물 작성 ==");
         System.out.printf("제목 : ");
         String title = sc.nextLine();
@@ -46,7 +47,7 @@ public class Main {
         articles.add(article);
         System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
       }
-      else if (cmd.equals("/usr/article/list")) {
+      else if (rq.getUrlPath().equals("/usr/article/list")) {
         System.out.println("== 게시물 리스트 ==");
         System.out.println("=================");
         System.out.println("번호 / 제목");
@@ -58,7 +59,7 @@ public class Main {
         }
       }
 
-      else if (cmd.equals("/usr/article/detail")) {
+      else if (rq.getUrlPath().equals("/usr/article/detail")) {
 
         Article article = articles.get(articles.size()-1);
 
@@ -73,7 +74,7 @@ public class Main {
         System.out.printf("내용 : %s\n", article.body);
       }
 
-      else if (cmd.equals("exit")) {
+      else if (rq.getUrlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
       }
@@ -89,13 +90,61 @@ class Article {
   int id;
   String title;
   String body;
-  Article(int id, String title, String body){
+
+  Article(int id, String title, String body) {
     this.id = id;
     this.title = title;
     this.body = body;
 
   }
+
   public String toString() {
-    return String.format("{id : %d, title : \"%s\", body : \"%s\" }",id, title, body);
+    return String.format("{id : %d, title : \"%s\", body : \"%s\" }", id, title, body);
+  }
+}
+class Rq {
+  String url;
+  Map params;
+  String urlPath;
+
+  Rq(String url){
+    this.url = url;
+    params = Util.getParamsFromUrl(url);
+    urlPath = Util.getUrlPathFromUrl(url);
+  }
+  public Map getParams(){
+    return params;
+  }
+  public String getUrlPath(){
+    return urlPath;
+  }
+}
+
+class Util{
+  static Map<String,String> getParamsFromUrl(String url){
+
+    Map<String, String> params = new HashMap<>();
+    String[] urlBits = url.split("\\?",2);
+    if(urlBits.length==1){
+      return params;
+    }
+    String queryString = urlBits[1];
+
+    for(String bit : queryString.split("&")) {
+      String[] bits = bit.split("=", 2);
+
+      if(bits.length == 1) {
+        continue;
+      }
+
+      params.put(bits[0], bits[1]);
+    }
+
+    return params;
+  }
+
+  public static String getUrlPathFromUrl(String url) {
+
+    return url.split("\\?", 2)[0];
   }
 }
