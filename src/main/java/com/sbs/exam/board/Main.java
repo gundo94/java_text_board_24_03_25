@@ -66,7 +66,21 @@ public class Main {
           System.out.println("게시물이 존재하지 않습니다.");
           continue;
         }
-        int id = Integer.parseInt(params.get("id"));
+
+        if (params.containsKey("id") == false){
+          System.out.println("id를 입력해주세요.");
+          continue;
+        }
+
+        int id = 0;
+
+        try {
+          id = Integer.parseInt(params.get("id"));
+        }catch (NumberFormatException e){
+          System.out.println("id를 정수로 입력해주세요.");
+          continue;
+        }
+        
 
         if(id > articles.size()){
           System.out.printf("%d번 게시물이 존재하지 않습니다.\n",id);
